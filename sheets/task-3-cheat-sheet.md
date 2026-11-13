@@ -28,10 +28,10 @@ Use clear indentation so it is obvious which instructions belong inside a condit
 
 ---
 
-## 2. Decompose using abstraction and refinement
+## 2. Break the problem into functions
 
-Start with the whole problem (abstraction), then repeatedly break it into
-smaller, implementable parts (refinement). Justify important decisions.
+Start with the whole problem, then break it into smaller tasks that can each
+be written as one function.
 
 ```text
 Results system
@@ -49,8 +49,8 @@ Results system
     show_no_results()
 ```
 
-Look for reusable components such as a menu function, date validator, or
-filter function rather than repeating the same logic.
+Reusable functions such as a menu function, date validator, or filter
+function prevent the same logic being copied in several places.
 
 ---
 
@@ -83,62 +83,18 @@ Pseudocode is structured English: it explains the logic without needing perfect 
 
 ---
 
-## 5. Flowchart symbols
+## 5. Menu pseudocode
 
-Use standard symbols consistently:
-
-| Symbol | Use |
-|--------|-----|
-| Rounded terminator | Start or End |
-| Parallelogram | Input or Output |
-| Rectangle | Process or calculation |
-| Diamond | Decision, with Yes and No arrows |
-| Double-sided rectangle | Calling a named sub-process |
-
-Keep every shape connected. Label both outcomes from every decision and use
-the same function names in the flowchart, pseudocode, and code.
-
----
-
-## 6. Image-style menu pseudocode
-
-The example uses a flag to keep showing the menu until the user chooses a
-valid option.
-
-```text
-SET not_valid_input TO TRUE
-
-WHILE not_valid_input = TRUE
-    SEND "Please choose an option from the list" TO DISPLAY
-    SEND "1. Positions" TO DISPLAY
-    SEND "2. Prize money" TO DISPLAY
-    SEND "3. Exit" TO DISPLAY
-    RECEIVE menu_choice (integer) FROM KEYBOARD
-
-    IF menu_choice = 1 THEN
-        SEND "Positions selected" TO DISPLAY
-        SET not_valid_input TO FALSE
-    ELSE IF menu_choice = 2 THEN
-        SEND "Prize money selected" TO DISPLAY
-        SET not_valid_input TO FALSE
-    ELSE IF menu_choice = 3 THEN
-        SEND "Goodbye" TO DISPLAY
-        SET not_valid_input TO FALSE
-    ELSE
-        SEND "That is not a valid choice" TO DISPLAY
-    END IF
-END WHILE
-
-RETURN menu_choice
-```
-
-For a shorter design, use:
+Ask for a choice and repeat the question until the answer is valid.
 
 ```text
 FUNCTION get_menu_choice()
+    SEND "1. Positions" TO DISPLAY
+    SEND "2. Prize money" TO DISPLAY
+    SEND "3. Exit" TO DISPLAY
     RECEIVE choice FROM KEYBOARD
-    WHILE choice is not between 1 and 4
-        SEND "Enter a number from 1 to 4" TO DISPLAY
+    WHILE choice is not between 1 and 3
+        SEND "Enter a number from 1 to 3" TO DISPLAY
         RECEIVE choice FROM KEYBOARD
     END WHILE
     RETURN choice
@@ -147,7 +103,7 @@ END FUNCTION
 
 ---
 
-## 7. Get an athlete from a numbered list
+## 6. Get an athlete from a numbered list
 
 Load the data, create a list of unique names, and validate the user's number.
 
@@ -177,7 +133,7 @@ range and then obtain the name from the list.
 
 ---
 
-## 8. Get and validate dates
+## 7. Get and validate dates
 
 Check the format before comparing dates. Reject a range where the end is
 before the start.
@@ -203,7 +159,7 @@ END FUNCTION
 
 ---
 
-## 9. Filter rows and count results
+## 8. Filter rows and count results
 
 Use inclusive comparisons so results on both dates are included.
 
@@ -232,14 +188,14 @@ END FUNCTION
 
 ---
 
-## 10. Communicate the design
+## 9. Communicate the design
 
 The design must be detailed enough for a client to make decisions and for a
 third party to build the solution. Use:
 
 - technical vocabulary accurately;
-- consistent names across flowcharts, pseudocode, and code;
-- written explanations alongside diagrams;
+- consistent names across pseudocode and code;
+- written explanations alongside the pseudocode;
 - inputs, outputs, data types, and data structures;
 - sequence, selection, and iteration;
 - reasons for important choices and their effects.
@@ -254,7 +210,7 @@ SET athlete_names (list of strings) TO unique athlete names
 
 ---
 
-## 11. Top mistakes
+## 10. Top mistakes
 
 | ❌ Don't | ✅ Do |
 |---------|------|

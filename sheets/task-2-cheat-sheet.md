@@ -16,13 +16,12 @@ For each input in your program:
 
 ---
 
-## 1. Test five kinds of data
+## 1. Test the important kinds of data
 
 | Type | Meaning | Example (valid: 45 to 150) |
 |------|---------|----------------------------|
-| **Valid normal** | Typical valid value | `90` |
-| **Valid extreme** | Valid but at an unusual extreme | `45` or `150` |
-| **Invalid normal** | Normally invalid value | `44` or `151` |
+| **Normal** | A typical valid value | `90` |
+| **Boundary** | Just below, on, and just above a limit | `44`, `45`, `46` |
 | **Invalid extreme** | Very far outside the valid range | `-999` or `999` |
 | **Erroneous** | Wrong type, blank, or malformed | `"abc"` · blank · `1.5` |
 
@@ -30,29 +29,19 @@ For each input in your program:
 |:-----:|:--:|:--:|:--:|:--:|:---:|:---:|:---:|
 | Result | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
 
-Use an ordinary value as well as valid and invalid extremes. Erroneous data
-could include `"abc"`, blank input, the wrong date format, or a missing file.
+Use a normal value, boundary values, an invalid extreme, and erroneous data.
+This gives evidence that the program works with ordinary, limit, impossible
+and incorrectly formatted input.
 
 ---
 
 ## 2. Name the error
 
-Use these simple questions in order: **Does the program start? Does it crash? Is the answer correct?**
+Use these simple questions in order:
 
-```mermaid
-flowchart TD
-    START(["Start"]) --> A{"Does it start?"}
-    A -->|No| S["SYNTAX<br/>missing : ) or quote"]
-    A -->|Yes| B{"Does it crash?"}
-    B -->|Yes| R["RUNTIME<br/>NameError, ValueError"]
-    B -->|No| C{"Answer matches<br/>your prediction?"}
-    C -->|No| L["LOGIC<br/>wrong operator or formula"]
-    C -->|Yes| P["PASS"]
-    S --> END(["End"])
-    R --> END
-    L --> END
-    P --> END
-```
+1. **Does the program start?** If not, look for a syntax error.
+2. **Does it crash while running?** If yes, look for a runtime error.
+3. **Is the answer correct?** If not, look for a logic error.
 
 | Error | What it means | Example |
 |-------|---------------|---------|
@@ -138,7 +127,7 @@ Do not silently change the requirement to make a failed test pass.
 ## Final check
 
 - [ ] Normal, boundary **and** erroneous data
-- [ ] Valid extreme, invalid extreme, and erroneous data included
+- [ ] Normal, boundary, invalid extreme, and erroneous data included
 - [ ] Every test has a purpose linked to a requirement
 - [ ] Expected result written first
 - [ ] Actual result compared with expected

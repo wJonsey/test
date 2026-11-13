@@ -21,13 +21,24 @@ The basic program journey is:
 
 **Load the CSV → check the data → ask the user → filter rows → calculate → display a report or graph**
 
-The official Task 4a focus is a working product that meets the brief. Formal
-testing documentation is not required here, but testing should be evident in a
-working product that meets the requirements.
+Think of the program as six simple jobs. Finish one job before moving to the
+next. The examples below show the important pattern rather than a complete
+program.
 
 ---
 
 ## 1. Organise the program
+
+Put each job in its own function:
+
+| Job | Example function | What it does |
+|-----|------------------|--------------|
+| Load | `load_data()` | Opens and cleans the CSV |
+| Ask | `get_menu_choice()` | Gets a valid answer |
+| Filter | `filter_results()` | Keeps matching rows |
+| Calculate | `get_position_counts()` | Produces numbers or totals |
+| Show | `show_prize_money()` | Prints a report |
+| Graph | `plot_positions()` | Displays a labelled chart |
 
 Use a small function for each responsibility. This avoids copied code and
 long, deeply nested blocks.
@@ -63,7 +74,8 @@ if __name__ == "__main__":
     main()
 ```
 
-`main()` loads the data, then loops on the menu until **Exit**.
+Read the `main()` function from top to bottom: it loads the data, shows the
+menu, calls the selected function, and repeats until **Exit**.
 
 `print()` shows something to the user. `return` sends a value back to the part of the program that called the function. Processing functions should usually `return`; report functions should usually `print`.
 
@@ -90,7 +102,8 @@ def load_data(filename):
     return df.dropna(subset=["Date", "Runner"])
 ```
 
-Check the data before processing it:
+After loading, inspect the table while developing. These commands help you
+spot a wrong column name, an unexpected data type, or missing values:
 
 ```python
 print(df.head())       # first five rows
@@ -99,6 +112,8 @@ print(df.columns)      # available column names
 df.info()              # data types and non-null counts
 print(df.describe())   # numeric summary
 ```
+
+Do not leave temporary inspection `print()` statements in the final product.
 
 ---
 
@@ -119,33 +134,44 @@ def get_menu_choice(options):
 
 ---
 
-## 4. Filter, count, total
+## 4. Filter rows
 
 Filtering means keeping only the rows that match the user's choices. A **mask** is a column of `True` and `False` values; `.loc[mask]` keeps the `True` rows. `.copy()` creates a safe separate result.
 
 ```python
-# One mask, then copy
+# Keep the rows for one person in one date range.
 mask = (df["Runner"] == name) & df["Date"].between(start, end)
 results = df.loc[mask].copy()
+```
 
-# Missing categories show 0, not None
+The `&` means **and**. Each condition must be in brackets. The result is a
+new DataFrame, so later changes do not accidentally change the original data.
+
+## 5. Calculate useful results
+
+```python
+# Count each position, including positions that do not appear.
 ORDER = ["1st", "2nd", "3rd", "Top 10", "Finished"]
 counts = results["Position"].value_counts().reindex(ORDER, fill_value=0)
 
-# Totals
-results["Prize Money"].sum()
-results["Prize Money"].mean()
-results.groupby("Event")["Prize Money"].agg(["count", "sum", "mean"])
-
-# Cleaning helpers
+# Check for and remove common data problems.
 print(df.isna().sum())       # missing values per column
 df = df.drop_duplicates()    # remove repeated rows
-df["Position"].unique()      # distinct position values
+print(df["Position"].unique()) # distinct position values
+```
+
+`value_counts()` counts categories. `reindex(..., fill_value=0)` adds a zero
+when a category is missing. `sum()` adds values and `mean()` calculates the
+average.
+
+```python
+total = results["Prize Money"].sum()
+average = results["Prize Money"].mean()
 ```
 
 ---
 
-## 5. Organise code for the brief
+## 6. Organise code for the brief
 
 Avoid several pages of copied procedural code and deeply nested `if`/`for`
 blocks. Use:
@@ -169,7 +195,7 @@ def calculate_total(results):
 
 ---
 
-## 6. Make output friendly
+## 7. Make output friendly
 
 | Need | Code | Shows |
 |------|------|-------|
@@ -197,7 +223,7 @@ plt.show()
 
 ---
 
-## 7. Defensive programming and security
+## 8. Defensive programming and security
 
 Defensive programming anticipates bad input, missing data, and unexpected
 states:
@@ -219,7 +245,7 @@ data. Never use `eval()` on input, and do not use broad `except:` blocks.
 
 ---
 
-## 8. Always / never
+## 9. Always / never
 
 | ✅ Always | ❌ Never |
 |----------|---------|
