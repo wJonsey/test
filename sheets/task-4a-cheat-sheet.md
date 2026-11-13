@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 **pandas** is a Python library for working with tables of data. A pandas table is called a **DataFrame**:
 
 - rows are individual records, such as one race;
-- columns are fields, such as `Runner`, `Date` and `Prize Money`;
+- columns are fields, such as `Runner`, `Date`, `Position` and `Prize Money`;
 - pandas provides tools to load, clean, filter and summarise the table.
 
 The basic program journey is:
@@ -95,6 +95,13 @@ def load_data(filename):
         return None
     except (pd.errors.EmptyDataError, pd.errors.ParserError) as error:
         print(f"Could not read the file: {error}")
+        return None
+
+    required_columns = {"Date", "Runner", "Position", "Prize Money"}
+    missing_columns = required_columns.difference(df.columns)
+    if missing_columns:
+        missing = ", ".join(sorted(missing_columns))
+        print(f"Missing required columns: {missing}.")
         return None
 
     df["Date"] = pd.to_datetime(df["Date"], format="%d/%m/%Y", errors="coerce")
@@ -178,7 +185,7 @@ blocks. Use:
 
 ```python
 DATA_FILE = "results.csv"       # constant
-OPTIONS = ("Positions", "Prize money", "Exit")
+OPTIONS = ("Positions", "Prize money", "Graph", "Exit")
 
 
 def calculate_total(results):

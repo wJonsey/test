@@ -126,7 +126,6 @@ Do not silently change the requirement to make a failed test pass.
 
 ## Final check
 
-- [ ] Normal, boundary **and** erroneous data
 - [ ] Normal, boundary, invalid extreme, and erroneous data included
 - [ ] Every test has a purpose linked to a requirement
 - [ ] Expected result written first

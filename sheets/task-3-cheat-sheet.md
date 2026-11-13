@@ -64,7 +64,8 @@ Before writing detailed pseudocode, list what goes **into** the program, what it
 | Person | Filter rows | Graph |
 | Dates | Count, total, average | "No results" |
 
-Each process becomes **one named function**. Use the same function name in the pseudocode and Python.
+Each process should be covered by a **named function**. Related steps may be
+grouped together, but use the same function name in the pseudocode and Python.
 
 ---
 
@@ -92,10 +93,10 @@ FUNCTION get_menu_choice()
     SEND "1. Positions" TO DISPLAY
     SEND "2. Prize money" TO DISPLAY
     SEND "3. Exit" TO DISPLAY
-    RECEIVE choice FROM KEYBOARD
+    RECEIVE choice (integer) FROM KEYBOARD
     WHILE choice is not between 1 and 3
         SEND "Enter a number from 1 to 3" TO DISPLAY
-        RECEIVE choice FROM KEYBOARD
+        RECEIVE choice (integer) FROM KEYBOARD
     END WHILE
     RETURN choice
 END FUNCTION
@@ -105,7 +106,7 @@ END FUNCTION
 
 ## 6. Get an athlete from a numbered list
 
-Load the data, create a list of unique names, and validate the user's number.
+Create a list of unique names and validate the user's number.
 
 ```text
 FUNCTION get_athlete(dataframe)
@@ -143,9 +144,8 @@ FUNCTION get_dates()
     RECEIVE start_date (dd/mm/yyyy) FROM KEYBOARD
     RECEIVE end_date (dd/mm/yyyy) FROM KEYBOARD
 
-    WHILE start_date is not a valid date OR
-          end_date is not a valid date OR
-          end_date is before start_date
+    WHILE start_date or end_date is not in dd/mm/yyyy format OR
+          start_date or end_date is not a valid date
         SEND "Enter a valid date range" TO DISPLAY
         RECEIVE start_date (dd/mm/yyyy) FROM KEYBOARD
         RECEIVE end_date (dd/mm/yyyy) FROM KEYBOARD
@@ -153,6 +153,23 @@ FUNCTION get_dates()
 
     CONVERT start_date TO a date
     CONVERT end_date TO a date
+
+    WHILE end_date is before start_date
+        SEND "Enter a valid date range" TO DISPLAY
+        RECEIVE start_date (dd/mm/yyyy) FROM KEYBOARD
+        RECEIVE end_date (dd/mm/yyyy) FROM KEYBOARD
+
+        WHILE start_date or end_date is not in dd/mm/yyyy format OR
+              start_date or end_date is not a valid date
+            SEND "Enter a valid date range" TO DISPLAY
+            RECEIVE start_date (dd/mm/yyyy) FROM KEYBOARD
+            RECEIVE end_date (dd/mm/yyyy) FROM KEYBOARD
+        END WHILE
+
+        CONVERT start_date TO a date
+        CONVERT end_date TO a date
+    END WHILE
+
     RETURN start_date, end_date
 END FUNCTION
 ```
@@ -184,7 +201,8 @@ FUNCTION count_results(data, selected_name, start_date, end_date)
 END FUNCTION
 ```
 
-> ⚠️ Never `RETURN` inside the loop. It stops at the first row that doesn't match.
+> ⚠️ Never `RETURN` the result inside the loop. It stops at the first
+> matching row and prevents the remaining rows from being processed.
 
 ---
 
